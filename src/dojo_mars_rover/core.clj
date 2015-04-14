@@ -38,10 +38,11 @@
       coordinates)))
 
 (defn turn-right [orientation]
-  (cond (= :north orientation) :east
-        (= :south orientation) :west
-        (= :east orientation) :south
-        (= :west orientation) :north))
+  (case orientation
+    :north :east
+    :south :west
+    :east :south
+    :west :north))
 
 (defn turn-left [orientation]
   (case orientation
@@ -49,7 +50,6 @@
     :south :east
     :east :north
     :west :south))
-
 
 (defn calculate-new-orientation [command {:keys [orientation]}]
   {:orientation 
