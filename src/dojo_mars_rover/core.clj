@@ -27,14 +27,11 @@
         (and (= :west orientation) (= "r" command)) [0 1]
         :default [0 0]))
 
-(defn get-new-coordinates [{:keys [x y orientation]} command]
-  (let [coordinates {:x x :y y}]
-    (zipmap 
-      [:x :y]
-      (if (or (= command "f")
-              (= command "b"))
-        (add-coordinates [x y] (get-direction orientation command))
-        [x y]))))
+(defn get-new-coordinates [{:keys [coords orientation]} command]
+  {:coords (if (or (= command "f")
+                   (= command "b"))
+             (add-coordinates coords (get-direction orientation command))
+             coords)})
 
 (defn turn-right [orientation]
   (case orientation
@@ -64,4 +61,4 @@
   (reduce calculate-new-position init-position (split  commands #"")))
 
 (defn rover [x y orientation]
-  {:x x :y y :orientation orientation})
+  {:coords [x y] :orientation orientation})
