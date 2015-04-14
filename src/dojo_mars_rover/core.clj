@@ -14,7 +14,7 @@
 (defn displacement [orientation command]
   (get-in displacements [orientation command]))
 
-(defn calc-coords [{:keys [coords orientation]} command]
+(defn calc-coords [command {:keys [coords orientation]}]
   (if (or (= command "f") (= command "b"))
     (add-coords coords (displacement orientation command))
     coords))
@@ -40,7 +40,7 @@
     orientation))
 
 (defn move [position command]
-  {:coords (calc-coords position command) 
+  {:coords (calc-coords command position) 
    :orientation (calc-orientation command position)})
 
 (defn receive [position commands]
