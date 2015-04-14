@@ -51,16 +51,14 @@
     :west :south))
 
 
-(defn calculate-new-orientation [command old-orientation]
+(defn calculate-new-orientation [command {old-orientation :orientation}]
   (cond (= "r" command) {:orientation (turn-right old-orientation)}
         (= "l" command) {:orientation (turn-left old-orientation)}
         :default {:orientation old-orientation}))
 
 (defn calculate-new-position [old-position command]
-  (let [old-orientation (:orientation old-position)
-        new-orientation (calculate-new-orientation command old-orientation)]
-    (merge (get-new-coordinates old-position command) 
-           new-orientation)))
+  (merge (get-new-coordinates old-position command) 
+         (calculate-new-orientation command old-position)))
 
 (defn receive [init-position commands]
   (reduce calculate-new-position init-position (split  commands #"")))
