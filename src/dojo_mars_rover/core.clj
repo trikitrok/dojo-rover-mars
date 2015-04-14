@@ -29,8 +29,7 @@
 
 (defn get-new-coordinates [{:keys [x y orientation]} command]
   (let [new-direction (get-direction orientation command)
-        coordinates {:x x :y y}
-        new-coordinates (add-coordinates coordinates new-direction)]
+        coordinates {:x x :y y}]
     (if (or (= command "f")
             (= command "b"))
       (add-coordinates coordinates new-direction)
