@@ -4,11 +4,8 @@
 
 (use '[clojure.string :only (split)])
 
-;; (x,y)   directions
-
 (defn add-coordinates [c1 c2]
   {:x (+ (:x c1) (:x c2)) :y (+ (:y c1) (:y c2))})
-
 
 (defn get-direction [orientation  command]
   (cond (and (= :north orientation) (= "f" command)) {:x 0 :y 1}
@@ -19,7 +16,7 @@
         (and (= :south orientation) (= "b" command)) {:x 0 :y 1}
         (and (= :south orientation) (= "l" command)) {:x 1 :y 0}
         (and (= :south orientation) (= "r" command)) {:x -1 :y 0}
-
+        
         (and (= :east orientation) (= "f" command)) {:x 1 :y 0}
         (and (= :east orientation) (= "b" command)) {:x -1 :y 0}
         (and (= :east orientation) (= "l" command)) {:x 0 :y 1}
@@ -35,7 +32,10 @@
         new-direction (get-direction direction command)
         coordinates {:x (:x position) :y (:y position)}
         new-coordinates (add-coordinates coordinates new-direction)]
-    new-coordinates))
+    (if (or (= command "f")
+            (= command "b"))
+      (add-coordinates coordinates new-direction)
+      coordinates)))
 
 (defn turn-right [orientation]
   (cond (= :north orientation) :east
@@ -45,10 +45,10 @@
 
 (defn turn-left [orientation]
   (case orientation
-      :north :west
-      :south :east
-      :east :north
-      :west :south))
+    :north :west
+    :south :east
+    :east :north
+    :west :south))
 
 
 (defn calculate-new-orientation [command old-orientation]
@@ -58,23 +58,14 @@
         :default old-orientation)
   )
 
-
-
 (defn calculate-new-position [old-position command]
   (let [new-coordinates (get-new-coordinates old-position command)
         old-orientation (:orientation old-position)
         new-orientation (calculate-new-orientation command old-orientation)]
-    {:x (:x new-coordinates) :y (:y new-coordinates) :orientation new-orientation}))
+    (merge new-coordinates {:orientation new-orientation})))
 
-(defn execute-move [init-position commands]
+(defn receive [init-position commands]
   (reduce calculate-new-position init-position (split  commands #"")))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
-
-(defn -main [& args]
-  (println args)
-  (let [init-position {:x 0 :y 0 :orientation :north}]
-    (println (execute-move init-position (first  args)))))
+(defn rover [x y orientation]
+  {:x x :y y :orientation orientation})
