@@ -34,9 +34,10 @@
     :west :south))
 
 (defn calculate-new-orientation [command {:keys [orientation]}]
-  (cond (= "r" command) (turn-right orientation)
-        (= "l" command) (turn-left orientation)
-        :default orientation))
+  (case command 
+    "r" (turn-right orientation)
+    "l" (turn-left orientation)
+    orientation))
 
 (defn move [old-position command]
   {:coords (get-new-coordinates old-position command) 
