@@ -1,8 +1,7 @@
 (ns dojo-mars-rover.core
   (:use [clojure.string :only [split]]))
 
-(defn- add-coords [c1 c2]
-  (map + c1 c2))
+(def ^:private add-coords (partial map +))
 
 (def ^:private displacements 
   {:north {"f" [0 1] "b" [0 -1]}
