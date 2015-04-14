@@ -14,7 +14,7 @@
 (defn displacement [orientation command]
   (get-in displacements [orientation command]))
 
-(defn get-new-coordinates [{:keys [coords orientation]} command]
+(defn calc-coords [{:keys [coords orientation]} command]
   (if (or (= command "f") (= command "b"))
     (add-coords coords (displacement orientation command))
     coords))
@@ -33,15 +33,15 @@
     :east :north
     :west :south))
 
-(defn calculate-new-orientation [command {:keys [orientation]}]
+(defn calc-orientation [command {:keys [orientation]}]
   (case command 
     "r" (turn-right orientation)
     "l" (turn-left orientation)
     orientation))
 
 (defn move [old-position command]
-  {:coords (get-new-coordinates old-position command) 
-   :orientation (calculate-new-orientation command old-position)})
+  {:coords (calc-coords old-position command) 
+   :orientation (calc-orientation command old-position)})
 
 (defn receive [position commands]
   (reduce move position (split  commands #"")))
