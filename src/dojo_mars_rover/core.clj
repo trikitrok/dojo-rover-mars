@@ -1,6 +1,4 @@
-(ns dojo-mars-rover.core
-  (:require [clojure.java.io :as io])
-  (:gen-class :main true))
+(ns dojo-mars-rover.core)
 
 (use '[clojure.string :only (split)])
 
