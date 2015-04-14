@@ -53,12 +53,12 @@
          (= "l" command) (turn-left orientation)
          :default orientation)})
 
-(defn calculate-new-position [old-position command]
+(defn move [old-position command]
   (merge (get-new-coordinates old-position command) 
          (calculate-new-orientation command old-position)))
 
 (defn receive [init-position commands]
-  (reduce calculate-new-position init-position (split  commands #"")))
+  (reduce move init-position (split  commands #"")))
 
 (defn rover [x y orientation]
   {:coords [x y] :orientation orientation})
