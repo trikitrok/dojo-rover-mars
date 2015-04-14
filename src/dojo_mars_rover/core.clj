@@ -39,12 +39,12 @@
     "l" (turn-left orientation)
     orientation))
 
-(defn move [old-position command]
-  {:coords (calc-coords old-position command) 
-   :orientation (calc-orientation command old-position)})
+(defn move [position command]
+  {:coords (calc-coords position command) 
+   :orientation (calc-orientation command position)})
 
 (defn receive [position commands]
-  (reduce move position (split  commands #"")))
+  (reduce move position (split commands #"")))
 
 (defn rover [x y orientation]
   {:coords [x y] :orientation orientation})
