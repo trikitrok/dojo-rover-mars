@@ -5,35 +5,36 @@
 (use '[clojure.string :only (split)])
 
 (defn add-coordinates [c1 c2]
-  {:x (+ (:x c1) (:x c2)) :y (+ (:y c1) (:y c2))})
+  (map + c1 c2))
 
-(defn get-direction [orientation  command]
-  (cond (and (= :north orientation) (= "f" command)) {:x 0 :y 1}
-        (and (= :north orientation) (= "b" command)) {:x 0 :y -1}
-        (and (= :north orientation) (= "l" command)) {:x -1 :y 0}
-        (and (= :north orientation) (= "r" command)) {:x 1 :y 0}
-        (and (= :south orientation) (= "f" command)) {:x 0 :y -1}
-        (and (= :south orientation) (= "b" command)) {:x 0 :y 1}
-        (and (= :south orientation) (= "l" command)) {:x 1 :y 0}
-        (and (= :south orientation) (= "r" command)) {:x -1 :y 0}
+(defn get-direction [orientation command]
+  (cond (and (= :north orientation) (= "f" command)) [0 1]
+        (and (= :north orientation) (= "b" command)) [0 -1]
+        (and (= :north orientation) (= "l" command)) [-1 0]
+        (and (= :north orientation) (= "r" command)) [1 0]
+        (and (= :south orientation) (= "f" command)) [0 -1]
+        (and (= :south orientation) (= "b" command)) [0 1]
+        (and (= :south orientation) (= "l" command)) [1 0]
+        (and (= :south orientation) (= "r" command)) [-1 0]
         
-        (and (= :east orientation) (= "f" command)) {:x 1 :y 0}
-        (and (= :east orientation) (= "b" command)) {:x -1 :y 0}
-        (and (= :east orientation) (= "l" command)) {:x 0 :y 1}
-        (and (= :east orientation) (= "r" command)) {:x 0 :y -1}
-        (and (= :west orientation) (= "f" command)) {:x -1 :y 0}
-        (and (= :west orientation) (= "b" command)) {:x 1 :y 0}
-        (and (= :west orientation) (= "l" command)) {:x 0 :y -1}
-        (and (= :west orientation) (= "r" command)) {:x 0 :y 1}
-        :default {:x 0 :y 0}))
+        (and (= :east orientation) (= "f" command)) [1 0]
+        (and (= :east orientation) (= "b" command)) [-1 0]
+        (and (= :east orientation) (= "l" command)) [0 1]
+        (and (= :east orientation) (= "r" command)) [0 -1]
+        (and (= :west orientation) (= "f" command)) [-1 0]
+        (and (= :west orientation) (= "b" command)) [1 0]
+        (and (= :west orientation) (= "l" command)) [0 -1]
+        (and (= :west orientation) (= "r" command)) [0 1]
+        :default [0 0]))
 
 (defn get-new-coordinates [{:keys [x y orientation]} command]
-  (let [new-direction (get-direction orientation command)
-        coordinates {:x x :y y}]
-    (if (or (= command "f")
-            (= command "b"))
-      (add-coordinates coordinates new-direction)
-      coordinates)))
+  (let [coordinates {:x x :y y}]
+    (zipmap 
+      [:x :y]
+      (if (or (= command "f")
+              (= command "b"))
+        (add-coordinates [x y] (get-direction orientation command))
+        [x y]))))
 
 (defn turn-right [orientation]
   (case orientation
