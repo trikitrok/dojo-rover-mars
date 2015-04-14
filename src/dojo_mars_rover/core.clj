@@ -4,7 +4,7 @@
 
 (use '[clojure.string :only (split)])
 
-(defn add-coordinates [c1 c2]
+(defn add-coords [c1 c2]
   (map + c1 c2))
 
 (def displacements 
@@ -14,9 +14,8 @@
    :west {"f" [-1 0] "b" [1 0]}})
 
 (defn get-new-coordinates [{:keys [coords orientation]} command]
-  (if (or (= command "f")
-          (= command "b"))
-    (add-coordinates coords (get-in displacements [orientation command]))
+  (if (or (= command "f") (= command "b"))
+    (add-coords coords (get-in displacements [orientation command]))
     coords))
 
 (defn turn-right [orientation]
