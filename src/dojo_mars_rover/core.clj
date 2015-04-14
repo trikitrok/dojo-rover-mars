@@ -13,9 +13,12 @@
    :east {"f" [1 0] "b" [-1 0]}
    :west {"f" [-1 0] "b" [1 0]}})
 
+(defn displacement [orientation command]
+  (get-in displacements [orientation command]))
+
 (defn get-new-coordinates [{:keys [coords orientation]} command]
   (if (or (= command "f") (= command "b"))
-    (add-coords coords (get-in displacements [orientation command]))
+    (add-coords coords (displacement orientation command))
     coords))
 
 (defn turn-right [orientation]
@@ -39,7 +42,7 @@
 
 (defn move [old-position command]
   {:coords (get-new-coordinates old-position command) 
-    :orientation (calculate-new-orientation command old-position)})
+   :orientation (calculate-new-orientation command old-position)})
 
 (defn receive [position commands]
   (reduce move position (split  commands #"")))
