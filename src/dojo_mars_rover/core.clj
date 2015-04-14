@@ -52,17 +52,15 @@
 
 
 (defn calculate-new-orientation [command old-orientation]
-  (cond (or  (= "f" command) (= "b" command)) old-orientation
-        (= "r" command) (turn-right old-orientation)
-        (= "l" command) (turn-left old-orientation)
-        :default old-orientation)
-  )
+  (cond (= "r" command) {:orientation (turn-right old-orientation)}
+        (= "l" command) {:orientation (turn-left old-orientation)}
+        :default {:orientation old-orientation}))
 
 (defn calculate-new-position [old-position command]
   (let [old-orientation (:orientation old-position)
         new-orientation (calculate-new-orientation command old-orientation)]
     (merge (get-new-coordinates old-position command) 
-           {:orientation new-orientation})))
+           new-orientation)))
 
 (defn receive [init-position commands]
   (reduce calculate-new-position init-position (split  commands #"")))
