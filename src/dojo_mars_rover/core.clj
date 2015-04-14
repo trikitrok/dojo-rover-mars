@@ -27,10 +27,9 @@
         (and (= :west orientation) (= "r" command)) {:x 0 :y 1}
         :default {:x 0 :y 0}))
 
-(defn get-new-coordinates [position command]
-  (let [direction (:orientation position)
-        new-direction (get-direction direction command)
-        coordinates {:x (:x position) :y (:y position)}
+(defn get-new-coordinates [{:keys [x y orientation]} command]
+  (let [new-direction (get-direction orientation command)
+        coordinates {:x x :y y}
         new-coordinates (add-coordinates coordinates new-direction)]
     (if (or (= command "f")
             (= command "b"))
