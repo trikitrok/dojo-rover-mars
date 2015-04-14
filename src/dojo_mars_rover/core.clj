@@ -59,10 +59,10 @@
   )
 
 (defn calculate-new-position [old-position command]
-  (let [new-coordinates (get-new-coordinates old-position command)
-        old-orientation (:orientation old-position)
+  (let [old-orientation (:orientation old-position)
         new-orientation (calculate-new-orientation command old-orientation)]
-    (merge new-coordinates {:orientation new-orientation})))
+    (merge (get-new-coordinates old-position command) 
+           {:orientation new-orientation})))
 
 (defn receive [init-position commands]
   (reduce calculate-new-position init-position (split  commands #"")))
