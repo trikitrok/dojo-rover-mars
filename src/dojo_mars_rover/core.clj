@@ -7,25 +7,14 @@
 (defn add-coordinates [c1 c2]
   (map + c1 c2))
 
-(defn get-direction [orientation command]
-  (cond (and (= :north orientation) (= "f" command)) [0 1]
-        (and (= :north orientation) (= "b" command)) [0 -1]
-        (and (= :north orientation) (= "l" command)) [-1 0]
-        (and (= :north orientation) (= "r" command)) [1 0]
-        (and (= :south orientation) (= "f" command)) [0 -1]
-        (and (= :south orientation) (= "b" command)) [0 1]
-        (and (= :south orientation) (= "l" command)) [1 0]
-        (and (= :south orientation) (= "r" command)) [-1 0]
-        
-        (and (= :east orientation) (= "f" command)) [1 0]
-        (and (= :east orientation) (= "b" command)) [-1 0]
-        (and (= :east orientation) (= "l" command)) [0 1]
-        (and (= :east orientation) (= "r" command)) [0 -1]
-        (and (= :west orientation) (= "f" command)) [-1 0]
-        (and (= :west orientation) (= "b" command)) [1 0]
-        (and (= :west orientation) (= "l" command)) [0 -1]
-        (and (= :west orientation) (= "r" command)) [0 1]
-        :default [0 0]))
+(def displacements 
+  {:north {"f" [0 1] "b" [0 -1]}
+   :south {"f" [0 -1] "b" [0 1]}
+   :east {"f" [1 0] "b" [-1 0]}
+   :west {"f" [-1 0] "b" [1 0]}})
+
+(defn get-direction [orientation command]  
+  (get-in displacements [orientation command]))
 
 (defn get-new-coordinates [{:keys [coords orientation]} command]
   {:coords (if (or (= command "f")
@@ -57,8 +46,8 @@
   (merge (get-new-coordinates old-position command) 
          (calculate-new-orientation command old-position)))
 
-(defn receive [init-position commands]
-  (reduce move init-position (split  commands #"")))
+(defn receive [position commands]
+  (reduce move position (split  commands #"")))
 
 (defn rover [x y orientation]
   {:coords [x y] :orientation orientation})
